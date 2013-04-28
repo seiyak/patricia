@@ -247,21 +247,17 @@ public class PatriciaTrie {
 		char[] nodeKeyArray = toBytes( nodeKey ).toCharArray();
 		char[] searchKeyArray = toBytes( searchKey ).toCharArray();
 
-		if ( searchKeyArray.length < from ) {
-			if ( ( nodeKeyArray.length - searchKeyArray.length ) == 0 ) {
-				nodeKeyArray = prependGaps( nodeKeyArray, getGapsAsZeroBits( from - nodeKeyArray.length ) );
-				searchKeyArray = prependGaps( searchKeyArray, getGapsAsZeroBits( from - searchKeyArray.length ) );
-
-			}
-			else if ( ( nodeKeyArray.length - searchKeyArray.length ) > 0 ) {
-				searchKeyArray = prependGaps( searchKeyArray, getGapsAsZeroBits( nodeKeyArray.length
-						- searchKeyArray.length ) );
-			}
+		if ( searchKeyArray.length > nodeKeyArray.length ) {
+			nodeKeyArray = prependGaps( nodeKeyArray, getGapsAsZeroBits( searchKeyArray.length - nodeKeyArray.length ) );
+		}
+		else if ( searchKeyArray.length < nodeKeyArray.length ) {
+			searchKeyArray = prependGaps( searchKeyArray, getGapsAsZeroBits( nodeKeyArray.length
+					- searchKeyArray.length ) );
 		}
 
 		int length = Math.min( nodeKeyArray.length, searchKeyArray.length );
 		int index = 0;
-		int start = ( length - from - 1 ) >= 0 ? ( length - from - 1 ) : length;
+		int start = 0;
 		for ( int i = start; i < length; i++ ) {
 			if ( nodeKeyArray[i] != searchKeyArray[i] ) {
 				break;
@@ -324,9 +320,7 @@ public class PatriciaTrie {
 		if ( node != null ) {
 			if ( getBitAt( node.getBitIndex(), searchKey ) == '0' ) {
 
-				if ( node.getBitIndex() >= node.getLeft().getBitIndex()
-						|| ( node.getLeft().getBitIndex() > getDiffAtFrom( node.getLeft().getKey(), searchKey,
-								toBytes( searchKey ).length() - 1 ) ) ) {
+				if ( node.getBitIndex() >= node.getLeft().getBitIndex() ) {
 					if ( node.getLeft().getKey().equals( searchKey ) ) {
 						nodes[0] = node.getLeft().getNodes()[0];
 						nodes[1] = node.getLeft().getNodes()[1];
@@ -341,9 +335,7 @@ public class PatriciaTrie {
 			}
 			else if ( getBitAt( node.getBitIndex(), searchKey ) == '1' ) {
 
-				if ( node.getBitIndex() >= node.getRight().getBitIndex()
-						|| ( node.getRight().getBitIndex() > getDiffAtFrom( node.getRight().getKey(), searchKey,
-								toBytes( searchKey ).length() - 1 ) ) ) {
+				if ( node.getBitIndex() >= node.getRight().getBitIndex() ) {
 					if ( node.getRight().getKey().equals( searchKey ) ) {
 						nodes[0] = node.getRight().getNodes()[0];
 						nodes[1] = node.getRight().getNodes()[1];

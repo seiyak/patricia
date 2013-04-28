@@ -119,6 +119,37 @@ public class PatriciaTrieTest {
 		assertNull( "expecting nodes==null but found not null", nodes );
 	}
 
+	@Test
+	public void testInsert2() {
+		Node[] nodes = patricia.insert( "low" );
+		notNullCheck( nodes );
+		eachNodeNullCheck( nodes, 0 );
+		eachNodeCheck( nodes, 1, 1, "low" );
+		eachNodeNullCheck( nodes, 2 );
+		eachNodeCheck( nodes, 3, 1, "low" );
+
+		nodes = patricia.insert( "COLD" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 1, "low" );
+		eachNodeCheck( nodes, 1, 2, "COLD" );
+		eachNodeCheck( nodes, 2, 2, "COLD" );
+		eachNodeCheck( nodes, 3, 1, "low" );
+
+		nodes = patricia.insert( "Hello" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 2, "COLD" );
+		eachNodeCheck( nodes, 1, 4, "Hello" );
+		eachNodeCheck( nodes, 2, 2, "COLD" );
+		eachNodeCheck( nodes, 3, 4, "Hello" );
+
+		nodes = patricia.insert( "hello" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 2, "COLD" );
+		eachNodeCheck( nodes, 1, 5, "hello" );
+		eachNodeCheck( nodes, 2, 5, "hello" );
+		eachNodeCheck( nodes, 3, 1, "low" );
+	}
+
 	private void notNullCheck(Node[] nodes) {
 		assertNotNull( "expecting nodes!=null but found null", nodes );
 		assertTrue( "expecting nodes.length==4 but found " + nodes.length, nodes.length == 4 );
@@ -172,13 +203,49 @@ public class PatriciaTrieTest {
 		checkSearched( false, patricia.search( "" ), "" );
 	}
 
+	@Test
+	public void testSearch2() {
+
+		patricia.insert( "low" );
+		patricia.insert( "COLD" );
+		patricia.insert( "Hello" );
+		patricia.insert( "hello" );
+		patricia.insert( "Hello World" );
+		patricia.insert( "HELLO WORLD WORLD" );
+		patricia.insert( "H" );
+		patricia.insert( "hey" );
+		patricia.insert( "she" );
+		patricia.insert( "a" );
+		patricia.insert( "apple" );
+		patricia.insert( "bee" );
+
+		checkSearched( true, patricia.search( "low" ), "low" );
+		checkSearched( true, patricia.search( "COLD" ), "COLD" );
+		checkSearched( true, patricia.search( "Hello" ), "Hello" );
+		checkSearched( true, patricia.search( "hello" ), "hello" );
+		checkSearched( true, patricia.search( "Hello World" ), "Hello World" );
+		checkSearched( true, patricia.search( "HELLO WORLD WORLD" ), "HELLO WORLD WORLD" );
+		checkSearched( true, patricia.search( "H" ), "H" );
+		checkSearched( true, patricia.search( "hey" ), "hey" );
+		checkSearched( true, patricia.search( "she" ), "she" );
+		checkSearched( true, patricia.search( "a" ), "a" );
+		checkSearched( true, patricia.search( "apple" ), "apple" );
+		checkSearched( true, patricia.search( "bee" ), "bee" );
+		checkSearched( false, patricia.search( "hot" ), "hot" );
+		checkSearched( false, patricia.search( "cold" ), "cold" );
+		checkSearched( false, patricia.search( "Why not reinvent the wheel" ), "Why not reinvent the wheel" );
+
+		patricia.insert( "Why not reinvent the wheel" );
+		checkSearched( true, patricia.search( "Why not reinvent the wheel" ), "Why not reinvent the wheel" );
+	}
+
 	private void checkSearched(boolean expected, boolean res, String searchKey) {
 
 		if ( expected ) {
-			assertTrue( "expecting insert()==true but found " + res + " for searchKey=" + searchKey, expected );
+			assertTrue( "expecting insert()==true but found " + res + " for searchKey=" + searchKey, res );
 		}
 		else {
-			assertFalse( "expecting insert()==false but found " + res + " for searchKey=" + searchKey, expected );
+			assertFalse( "expecting insert()==false but found " + res + " for searchKey=" + searchKey, res );
 
 		}
 	}
