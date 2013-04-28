@@ -112,6 +112,11 @@ public class PatriciaTrieTest {
 		eachNodeCheck( nodes, 1, 7, "L" );
 		eachNodeCheck( nodes, 2, 7, "L" );
 		eachNodeCheck( nodes, 3, 6, "M" );
+
+		nodes = patricia.insert( null );
+		assertNull( "expecting nodes==null but found not null", nodes );
+		nodes = patricia.insert( "" );
+		assertNull( "expecting nodes==null but found not null", nodes );
 	}
 
 	private void notNullCheck(Node[] nodes) {

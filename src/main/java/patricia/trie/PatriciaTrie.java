@@ -17,6 +17,10 @@ public class PatriciaTrie {
 
 	public Node[] insert(String searchKey) {
 
+		if ( isNullOrEmpty( searchKey ) ) {
+			return null;
+		}
+
 		if ( initializeHead( searchKey ) ) {
 			return head.getNodes();
 		}
