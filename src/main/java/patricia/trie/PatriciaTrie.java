@@ -324,8 +324,9 @@ public class PatriciaTrie {
 		if ( node != null ) {
 			if ( getBitAt( node.getBitIndex(), searchKey ) == '0' ) {
 
-				if ( node.getBitIndex() <= node.getLeft().getBitIndex() ) {
-
+				if ( node.getBitIndex() >= node.getLeft().getBitIndex()
+						|| ( node.getLeft().getBitIndex() > getDiffAtFrom( node.getLeft().getKey(), searchKey,
+								toBytes( searchKey ).length() - 1 ) ) ) {
 					if ( node.getLeft().getKey().equals( searchKey ) ) {
 						nodes[0] = node.getLeft().getNodes()[0];
 						nodes[1] = node.getLeft().getNodes()[1];
@@ -335,12 +336,14 @@ public class PatriciaTrie {
 
 					return;
 				}
+
 				doSearch( node.getLeft(), searchKey, nodes );
 			}
 			else if ( getBitAt( node.getBitIndex(), searchKey ) == '1' ) {
 
-				if ( node.getBitIndex() <= node.getRight().getBitIndex() ) {
-
+				if ( node.getBitIndex() >= node.getRight().getBitIndex()
+						|| ( node.getRight().getBitIndex() > getDiffAtFrom( node.getRight().getKey(), searchKey,
+								toBytes( searchKey ).length() - 1 ) ) ) {
 					if ( node.getRight().getKey().equals( searchKey ) ) {
 						nodes[0] = node.getRight().getNodes()[0];
 						nodes[1] = node.getRight().getNodes()[1];
