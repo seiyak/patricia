@@ -63,6 +63,55 @@ public class PatriciaTrieTest {
 		eachNodeCheck( nodes, 1, 4, "H" );
 		eachNodeCheck( nodes, 2, 5, "E" );
 		eachNodeCheck( nodes, 3, 4, "H" );
+
+		nodes = patricia.insert( "I" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 4, "H" );
+		eachNodeCheck( nodes, 1, 7, "I" );
+		eachNodeCheck( nodes, 2, 4, "H" );
+		eachNodeCheck( nodes, 3, 7, "I" );
+
+		nodes = patricia.insert( "N" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 4, "H" );
+		eachNodeCheck( nodes, 1, 5, "N" );
+		eachNodeCheck( nodes, 2, 7, "I" );
+		eachNodeCheck( nodes, 3, 5, "N" );
+
+		nodes = patricia.insert( "G" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 5, "E" );
+		eachNodeCheck( nodes, 1, 6, "G" );
+		eachNodeCheck( nodes, 2, 5, "E" );
+		eachNodeCheck( nodes, 3, 6, "G" );
+
+		nodes = patricia.insert( "X" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 3, "S" );
+		eachNodeCheck( nodes, 1, 4, "X" );
+		eachNodeCheck( nodes, 2, 7, "R" );
+		eachNodeCheck( nodes, 3, 4, "X" );
+
+		nodes = patricia.insert( "M" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 5, "N" );
+		eachNodeCheck( nodes, 1, 6, "M" );
+		eachNodeCheck( nodes, 2, 6, "M" );
+		eachNodeCheck( nodes, 3, 5, "N" );
+
+		nodes = patricia.insert( "P" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 4, "X" );
+		eachNodeCheck( nodes, 1, 6, "P" );
+		eachNodeCheck( nodes, 2, 6, "P" );
+		eachNodeCheck( nodes, 3, 7, "R" );
+
+		nodes = patricia.insert( "L" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 6, "M" );
+		eachNodeCheck( nodes, 1, 7, "L" );
+		eachNodeCheck( nodes, 2, 7, "L" );
+		eachNodeCheck( nodes, 3, 6, "M" );
 	}
 
 	private void notNullCheck(Node[] nodes) {
