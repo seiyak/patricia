@@ -131,4 +131,50 @@ public class PatriciaTrieTest {
 				"expecting nodes[" + index + "].getKey().equals( + " + insertedKey + " ) but found "
 						+ nodes[index].getKey(), nodes[index].getKey().equals( insertedKey ) );
 	}
+
+	@Test
+	public void testSearch() {
+		patricia.insert( "A" );
+		patricia.insert( "S" );
+		patricia.insert( "E" );
+		patricia.insert( "R" );
+		patricia.insert( "C" );
+		patricia.insert( "H" );
+		patricia.insert( "I" );
+		patricia.insert( "N" );
+		patricia.insert( "G" );
+		patricia.insert( "X" );
+		patricia.insert( "M" );
+		patricia.insert( "P" );
+		patricia.insert( "L" );
+
+		checkSearched( true, patricia.search( "A" ), "A" );
+		checkSearched( true, patricia.search( "S" ), "S" );
+		checkSearched( true, patricia.search( "E" ), "E" );
+		checkSearched( true, patricia.search( "R" ), "R" );
+		checkSearched( true, patricia.search( "C" ), "C" );
+		checkSearched( true, patricia.search( "H" ), "H" );
+		checkSearched( true, patricia.search( "I" ), "I" );
+		checkSearched( true, patricia.search( "G" ), "N" );
+		checkSearched( true, patricia.search( "X" ), "X" );
+		checkSearched( true, patricia.search( "M" ), "M" );
+		checkSearched( true, patricia.search( "P" ), "P" );
+		checkSearched( true, patricia.search( "L" ), "L" );
+		checkSearched( false, patricia.search( "Y" ), "Y" );
+		checkSearched( false, patricia.search( "B" ), "B" );
+		checkSearched( false, patricia.search( "D" ), "D" );
+		checkSearched( false, patricia.search( null ), null );
+		checkSearched( false, patricia.search( "" ), "" );
+	}
+
+	private void checkSearched(boolean expected, boolean res, String searchKey) {
+
+		if ( expected ) {
+			assertTrue( "expecting insert()==true but found " + res + " for searchKey=" + searchKey, expected );
+		}
+		else {
+			assertFalse( "expecting insert()==false but found " + res + " for searchKey=" + searchKey, expected );
+
+		}
+	}
 }

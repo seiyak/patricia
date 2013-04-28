@@ -293,4 +293,75 @@ public class PatriciaTrie {
 
 		return res;
 	}
+
+	public final boolean search(String searchKey) {
+
+		if ( isNullOrEmpty( searchKey ) ) {
+			return false;
+		}
+
+		Node[] nodes = new Node[4];
+		doSearch( head, searchKey, nodes );
+
+		if ( nodes[1] == null ) {
+			return false;
+		}
+
+		// should not happen. If it does, that means that Patricia.insert() has some bug.
+		if ( !nodes[1].getKey().equals( searchKey ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private void doSearch(Node node, String searchKey, Node[] nodes) {
+
+		if ( node != null ) {
+			if ( getBitAt( node.getBitIndex(), searchKey ) == '0' ) {
+
+				if ( node.getBitIndex() <= node.getLeft().getBitIndex() ) {
+
+					if ( node.getLeft().getKey().equals( searchKey ) ) {
+						nodes[0] = node.getLeft().getNodes()[0];
+						nodes[1] = node.getLeft().getNodes()[1];
+						nodes[2] = node.getLeft().getNodes()[2];
+						nodes[3] = node.getLeft().getNodes()[3];
+					}
+
+					return;
+				}
+				doSearch( node.getLeft(), searchKey, nodes );
+			}
+			else if ( getBitAt( node.getBitIndex(), searchKey ) == '1' ) {
+
+				if ( node.getBitIndex() <= node.getRight().getBitIndex() ) {
+
+					if ( node.getRight().getKey().equals( searchKey ) ) {
+						nodes[0] = node.getRight().getNodes()[0];
+						nodes[1] = node.getRight().getNodes()[1];
+						nodes[2] = node.getRight().getNodes()[2];
+						nodes[3] = node.getRight().getNodes()[3];
+					}
+
+					return;
+				}
+
+				doSearch( node.getRight(), searchKey, nodes );
+			}
+		}
+	}
+
+	private boolean isNullOrEmpty(String str) {
+
+		if ( str == null ) {
+			return true;
+		}
+
+		if ( str.equals( "" ) ) {
+			return true;
+		}
+
+		return false;
+	}
 }
