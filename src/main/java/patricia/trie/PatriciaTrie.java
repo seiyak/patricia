@@ -15,29 +15,30 @@ public class PatriciaTrie {
 
 	}
 
-	public Node insert(String searchKey) {
+	public Node[] insert(String searchKey) {
 
 		if ( initializeHead( searchKey ) ) {
-			return new Node( head.getBitIndex(), head.getKey() );
+			return head.getNodes();
 		}
 
-		Node res = new Node();
-		doInsert( head, searchKey, res );
+		Node[] nodes = new Node[4];
+		doInsert( head, searchKey, nodes );
 
-		return res;
+		return nodes;
 	}
 
 	private boolean initializeHead(String searchKey) {
 		if ( head == null ) {
-			head = new Node( getLeftMostOneBit( searchKey ), null, null, head, searchKey );
-			log.debug( "str:  " + searchKey + " binary expression: " + toBytes( searchKey ) );
+			head = new Node( getLeftMostOneBit( searchKey ), null, null, null, searchKey );
+			head.setRight( head );
+
 			return true;
 		}
 
 		return false;
 	}
 
-	private void doInsert(Node node, String searchKey, Node res) {
+	private void doInsert(Node node, String searchKey, Node[] nodes) {
 
 		if ( node != null ) {
 			// search left
@@ -48,27 +49,35 @@ public class PatriciaTrie {
 					Node n = createNewNode( node, searchKey );
 					n.setParent( node );
 					node.setLeft( n );
-					res.copy( n );
+
+					nodes[0] = n.getNodes()[0];
+					nodes[1] = n.getNodes()[1];
+					nodes[2] = n.getNodes()[2];
+					nodes[3] = n.getNodes()[3];
 				}
 				else if ( node.getBitIndex() >= node.getLeft().getBitIndex() ) {
 					// find upward pointer
-					Node newNode = createNewNode( node, searchKey );
-					updateLeftOrRightPointerOnNewNode( newNode, node, searchKey );
-					node.setLeft( newNode );
+					Node newNode = createNewNode( node.getLeft(), searchKey );
+
 					if ( node.getBitIndex() > newNode.getBitIndex() ) {
 						// new node comes above node
 						newNode.setParent( node.getParent() );
 						node.setParent( newNode );
+						updateLeftOrRightPointerOnCurrentNode( newNode, node.getLeft(), searchKey );
 					}
 					else if ( node.getBitIndex() < newNode.getBitIndex() ) {
 						// new node comes below node
 						newNode.setParent( node );
+						node.setLeft( newNode );
 					}
 
-					res.copy( newNode );
+					nodes[0] = newNode.getNodes()[0];
+					nodes[1] = newNode.getNodes()[1];
+					nodes[2] = newNode.getNodes()[2];
+					nodes[3] = newNode.getNodes()[3];
 				}
 				else {
-					doInsert( node.getLeft(), searchKey, res );
+					doInsert( node.getLeft(), searchKey, nodes );
 				}
 			}
 			// search right
@@ -78,27 +87,35 @@ public class PatriciaTrie {
 					Node n = createNewNode( node, searchKey );
 					n.setParent( node );
 					node.setRight( n );
-					res.copy( n );
+
+					nodes[0] = n.getNodes()[0];
+					nodes[1] = n.getNodes()[1];
+					nodes[2] = n.getNodes()[2];
+					nodes[3] = n.getNodes()[3];
 				}
-				if ( node.getBitIndex() >= node.getRight().getBitIndex() ) {
+				else if ( node.getBitIndex() >= node.getRight().getBitIndex() ) {
 					// find upward pointer
-					Node newNode = createNewNode( node, searchKey );
-					updateLeftOrRightPointerOnNewNode( newNode, node, searchKey );
-					node.setRight( newNode );
+					Node newNode = createNewNode( node.getRight(), searchKey );
+
 					if ( node.getBitIndex() > newNode.getBitIndex() ) {
 						// new node comes above node
 						newNode.setParent( node.getParent() );
 						node.setParent( newNode );
+						updateLeftOrRightPointerOnCurrentNode( newNode, node.getRight(), searchKey );
 					}
 					else if ( node.getBitIndex() < newNode.getBitIndex() ) {
 						// new node comes below node
+						node.setRight( newNode );
 						newNode.setParent( node );
 					}
 
-					res.copy( newNode );
+					nodes[0] = newNode.getNodes()[0];
+					nodes[1] = newNode.getNodes()[1];
+					nodes[2] = newNode.getNodes()[2];
+					nodes[3] = newNode.getNodes()[3];
 				}
 				else {
-					doInsert( node.getRight(), searchKey, res );
+					doInsert( node.getRight(), searchKey, nodes );
 				}
 			}
 		}
@@ -109,12 +126,12 @@ public class PatriciaTrie {
 		return new Node( bitIndex, parent, left, right, searchKey );
 	}
 
-	private void updateLeftOrRightPointerOnNewNode(Node newNode, Node node, String searchKey) {
+	private void updateLeftOrRightPointerOnCurrentNode(Node newNode, Node node, String searchKey) {
 
-		if ( getBitAt( newNode.getBitIndex(), searchKey ) == '0' ) {
+		if ( getBitAt( node.getBitIndex(), searchKey ) == '0' ) {
 			newNode.setLeft( node );
 		}
-		else if ( getBitAt( newNode.getBitIndex(), searchKey ) == '1' ) {
+		else if ( getBitAt( node.getBitIndex(), searchKey ) == '1' ) {
 			newNode.setRight( node );
 		}
 	}
