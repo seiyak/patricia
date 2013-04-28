@@ -55,7 +55,9 @@ public class PatriciaTrie {
 					nodes[2] = n.getNodes()[2];
 					nodes[3] = n.getNodes()[3];
 				}
-				else if ( node.getBitIndex() >= node.getLeft().getBitIndex() ) {
+				else if ( node.getBitIndex() >= node.getLeft().getBitIndex()
+						|| ( node.getLeft().getBitIndex() > getDiffAtFrom( node.getLeft().getKey(), searchKey,
+								toBytes( searchKey ).length() - 1 ) ) ) {
 					// find upward pointer
 					Node newNode = createNewNode( node.getLeft(), searchKey );
 
@@ -93,7 +95,9 @@ public class PatriciaTrie {
 					nodes[2] = n.getNodes()[2];
 					nodes[3] = n.getNodes()[3];
 				}
-				else if ( node.getBitIndex() >= node.getRight().getBitIndex() ) {
+				else if ( node.getBitIndex() >= node.getRight().getBitIndex()
+						|| ( node.getRight().getBitIndex() > getDiffAtFrom( node.getRight().getKey(), searchKey,
+								toBytes( searchKey ).length() - 1 ) ) ) {
 					// find upward pointer
 					Node newNode = createNewNode( node.getRight(), searchKey );
 

@@ -56,6 +56,13 @@ public class PatriciaTrieTest {
 		eachNodeCheck( nodes, 1, 6, "C" );
 		eachNodeCheck( nodes, 2, 1, "A" );
 		eachNodeCheck( nodes, 3, 6, "C" );
+
+		nodes = patricia.insert( "H" );
+		notNullCheck( nodes );
+		eachNodeCheck( nodes, 0, 3, "S" );
+		eachNodeCheck( nodes, 1, 4, "H" );
+		eachNodeCheck( nodes, 2, 5, "E" );
+		eachNodeCheck( nodes, 3, 4, "H" );
 	}
 
 	private void notNullCheck(Node[] nodes) {
