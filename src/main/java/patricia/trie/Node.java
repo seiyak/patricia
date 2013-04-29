@@ -79,6 +79,9 @@ public class Node {
 
 		bitIndex = node.getBitIndex();
 		key = node.getKey();
+		parent = node.getParent();
+		left = node.getLeft();
+		right = node.getRight();
 	}
 
 	/**
