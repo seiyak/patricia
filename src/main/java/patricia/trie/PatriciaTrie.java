@@ -1,5 +1,8 @@
 package patricia.trie;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 public class PatriciaTrie {
@@ -347,6 +350,85 @@ public class PatriciaTrie {
 				}
 
 				doSearch( node.getRight(), searchKey, nodes );
+			}
+		}
+	}
+
+	public final List<String> searchPrefix(String prefix) {
+
+		if ( isNullOrEmpty( prefix ) ) {
+			throw new IllegalArgumentException( "invalid argument specified. prefix," + prefix );
+		}
+
+		Node res = new Node();
+		// res holds where to search prefix if it
+		doSearch( head, prefix, res );
+
+		List<String> results = new LinkedList<String>();
+
+		if ( res.getKey() == null ) {
+			log.warn( "could not find strings starting with the prefix," + prefix );
+
+			return results;
+		}
+
+		doSearchPrefix( res, prefix, results );
+
+		return results;
+	}
+
+	private void doSearchPrefix(Node node, String prefix, List<String> results) {
+
+		if ( node != null ) {
+
+			if ( ( node.getLeft() != null ) && ( node.getBitIndex() < node.getLeft().getBitIndex() ) ) {
+				doSearchPrefix( node.getLeft(), prefix, results );
+			}
+
+			System.out.println( "bitIndex: " + node.getBitIndex() + " key: " + node.getKey() + " prefix: " + prefix );
+			if ( node.getKey().startsWith( prefix ) ) {
+				results.add( node.getKey() );
+			}
+
+			if ( ( node.getRight() != null ) && ( node.getBitIndex() < node.getRight().getBitIndex() ) ) {
+				doSearchPrefix( node.getRight(), prefix, results );
+			}
+		}
+	}
+
+	private void doSearch(Node node, String prefix, Node res) {
+
+		if ( node != null ) {
+			if ( getBitAt( node.getBitIndex(), prefix ) == '0' ) {
+
+				if ( node.getLeft() != null && ( node.getLeft().getKey().startsWith( prefix ) ) ) {
+
+					if ( res.getKey() == null ) {
+						res.copy( node.getLeft() );
+
+						return;
+					}
+				}
+
+				if ( node.getBitIndex() >= node.getLeft().getBitIndex() ) {
+					return;
+				}
+
+				doSearch( node.getLeft(), prefix, res );
+			}
+			else if ( getBitAt( node.getBitIndex(), prefix ) == '1' ) {
+
+				if ( node.getRight().getKey().startsWith( prefix ) ) {
+					if ( res.getKey() == null ) {
+						res.copy( node.getRight() );
+					}
+				}
+
+				if ( node.getBitIndex() >= node.getRight().getBitIndex() ) {
+					return;
+				}
+
+				doSearch( node.getRight(), prefix, res );
 			}
 		}
 	}

@@ -2,6 +2,8 @@ package patricia.trie;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -248,5 +250,48 @@ public class PatriciaTrieTest {
 			assertFalse( "expecting insert()==false but found " + res + " for searchKey=" + searchKey, res );
 
 		}
+	}
+
+	@Test
+	public void testSearchPrefix() {
+
+		patricia.insert( "S" );
+		patricia.insert( "A" );
+		patricia.insert( "ABC" );
+		patricia.insert( "B" );
+
+		List<String> results = patricia.searchPrefix( "A" );
+		checkPrefixSize( 2, results.size() );
+	}
+
+	@Test
+	public void testSearchPrefix2() {
+
+		patricia.insert( "Hello" );
+		patricia.insert( "Huge" );
+		patricia.insert( "Here" );
+		patricia.insert( "there" );
+		patricia.insert( "hello" );
+		patricia.insert( "After" );
+		patricia.insert( "health" );
+		patricia.insert( "Health" );
+		patricia.insert( "Health Center" );
+		patricia.insert( "Hello World" );
+		patricia.insert( "Help" );
+		patricia.insert( "Hex" );
+		patricia.insert( "Horn" );
+		patricia.insert( "hH" );
+		patricia.insert( "need some help" );
+
+		List<String> results = patricia.searchPrefix( "z" );
+		checkPrefixSize( 0, results.size() );
+
+		results = patricia.searchPrefix( "h" );
+		checkPrefixSize( 3, results.size() );
+	}
+
+	private void checkPrefixSize(int expected, int res) {
+		assertTrue( "expecting results.size()==" + expected + " but found " + res, expected == res );
+
 	}
 }
