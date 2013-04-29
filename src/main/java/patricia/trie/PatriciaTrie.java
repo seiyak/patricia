@@ -222,14 +222,14 @@ public class PatriciaTrie {
 
 		String binary = toBytes( str );
 
-		log.debug( "str: " + str + " binary expression: " + binary );
+		//log.debug( "str: " + str + " binary expression: " + binary );
 
 		if ( ( bitIndex >= 0 ) && ( bitIndex < binary.length() ) ) {
 			return binary.toCharArray()[bitIndex];
 		}
 
-		log.warn( "bitIndex," + bitIndex + " is out of range, " + binary.length()
-				+ ". about to prepend zeros and return the corresponding bit," + bitIndex );
+		//log.warn( "bitIndex," + bitIndex + " is out of range, " + binary.length()
+		//		+ ". about to prepend zeros and return the corresponding bit," + bitIndex );
 
 		return prependGaps( binary.toCharArray(), getGapsAsZeroBits( bitIndex - binary.toCharArray().length ) )[bitIndex - 1];
 	}
