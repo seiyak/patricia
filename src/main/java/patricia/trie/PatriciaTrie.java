@@ -385,7 +385,6 @@ public class PatriciaTrie {
 				doSearchPrefix( node.getLeft(), prefix, results );
 			}
 
-			System.out.println( "bitIndex: " + node.getBitIndex() + " key: " + node.getKey() + " prefix: " + prefix );
 			if ( node.getKey().startsWith( prefix ) ) {
 				results.add( node.getKey() );
 			}
