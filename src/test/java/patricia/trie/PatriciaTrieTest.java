@@ -294,4 +294,15 @@ public class PatriciaTrieTest {
 		assertTrue( "expecting results.size()==" + expected + " but found " + res, expected == res );
 
 	}
+
+	@Test
+	public void testInOrder() {
+
+		patricia.insert( "S" );
+		patricia.insert( "A" );
+		patricia.insert( "ABC" );
+		patricia.insert( "B" );
+
+		patricia.printInOrder();
+	}
 }

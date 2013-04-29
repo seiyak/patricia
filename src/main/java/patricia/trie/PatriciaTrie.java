@@ -445,4 +445,23 @@ public class PatriciaTrie {
 
 		return false;
 	}
+
+	public void printInOrder() {
+		doPrintInOrder( head );
+	}
+
+	private void doPrintInOrder(Node node) {
+
+		if ( node != null ) {
+			if ( ( node.getLeft() != null ) && ( node.getBitIndex() < node.getLeft().getBitIndex() ) ) {
+				doPrintInOrder( node.getLeft() );
+			}
+
+			System.out.println( "bit index: " + node.getBitIndex() + " key: " + node.getKey() );
+
+			if ( ( node.getRight() != null ) && ( node.getBitIndex() < node.getRight().getBitIndex() ) ) {
+				doPrintInOrder( node.getRight() );
+			}
+		}
+	}
 }
